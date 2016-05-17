@@ -134,6 +134,25 @@ module MockServer
         expectation.populate_from_payload(payload)
         expectation
       end
+
+      def expectation_array_from_json(json_array)
+        expectation_array = []
+        json_array.each { |x|
+          e = expectation_from_json(x)
+          expectation_array << e
+        }
+        expectation_array
+      end
+
+      def add_header_to_expect_array(expectation_array, key, value)
+        expectations = []
+        expectation_array.each { |expectation|
+          expectation.request.headers << header(key, value)
+          expectations << expectation
+        }
+        expectations
+      end
+
     end
   end
 end

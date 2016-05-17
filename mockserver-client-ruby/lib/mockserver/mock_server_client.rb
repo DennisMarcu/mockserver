@@ -30,6 +30,19 @@ module MockServer
       parse_string_to_json(response)
     end
 
+    def register_expectations(expectations)
+      request_array = []
+      expectations.each { |x|
+        fail 'Expectation passed in is not valid type' unless x.is_a?(Expectation)
+        request = create_expectation_request(x)
+        request_array << request
+      }
+      logger.debug('Registering new array of expectations')
+      response = @base[EXPECTATION_ENDPOINT].put(request_array.to_json, content_type: :json)
+      logger.debug("Got register response: #{response.code}")
+      parse_string_to_json(response)
+    end
+
     private
 
     # Create an expecation request to send to the expectation endpoint of
