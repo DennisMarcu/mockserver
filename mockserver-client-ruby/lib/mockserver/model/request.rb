@@ -31,21 +31,23 @@ module MockServer::Model
     property :query_string_parameters, default: Parameters.new([])
     property :cookies, default: Cookies.new([])
     property :headers, default: Headers.new([])
-    property :body, transform_with: (lambda do |body|
-      if body && body.type.to_s == 'BINARY'
-        body.type = :STRING
-        body.value = Base64.decode64(body.value)
-      end
-
-      body
-    end)
+    # property :body, transform_with: (lambda do |body|
+    #   if body && body.type.to_s == 'BINARY'
+    #     body.type = :STRING
+    #     body.value = Base64.decode64(body.value)
+    #   end
+    #
+    #   body
+    # end)
+    property :body
 
     coerce_key :method, HTTPMethod
     coerce_key :path, String
     coerce_key :query_string_parameters, Parameters
     coerce_key :cookies, Cookies
     coerce_key :headers, Headers
-    coerce_key :body, Body
+    # coerce_key :body, Body
+    coerce_key :body, String
 
     # Creates a request from a hash
     # @param payload [Hash] a hash representation of the request
